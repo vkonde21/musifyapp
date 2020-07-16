@@ -1,0 +1,26 @@
+{% extends 'login/basic.html' %}
+{% block title%} searchusers {% endblock %}
+{% block body%}
+{% load auth_extras %}
+<div class="container">
+{% for user in users%}
+<div class="jumbotron my-3 border border-success" style="width:400px;">
+  <center><h1 class="display-6">{{user.username}}</h1>
+  <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"></center>
+  <hr class="my-4">
+  <p class="lead">
+    <h3>Followers:{{user.profile.followers.all|length}}</h3>
+    <h3>Following:{{user.profile.following.all|length}}</h3>
+    {% ifnotequal request.user.username user.username %}
+    {% if request.user|is_follower:user%}
+    <a class="btn btn-primary btn-lg" href="/unfollow/{{user.id}}" role="button">Unfollow</a>
+    {%else%}
+    <a class="btn btn-primary btn-lg" href="/follow/{{user.id}}" role="button">Follow</a>
+    {%endif%}
+    {%endifnotequal%}
+    <a class="btn btn-primary btn-lg mx-3" href="/userdashboard/{{user.id}}" role="button">View Details</a>
+  </p>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

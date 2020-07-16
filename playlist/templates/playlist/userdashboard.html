@@ -1,0 +1,139 @@
+{% extends 'login/basic.html' %}
+{%block title%}{{user.username}}{{user.id}}{%endblock%}
+{%block body%}
+<style>
+.text-white {
+    color: #fff !important;
+}
+.ui-bg-overlay-container, .ui-bg-video-container {
+    position: relative;
+}
+.ui-bg-cover {
+    background-color: transparent;
+    background-position: center center;
+    background-size: cover;
+}
+.ui-bg-overlay-container .ui-bg-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+}
+
+.bg-dark {
+    background-color: rgba(24,28,33,0.9) !important;
+}
+.opacity-50 {
+    opacity: .5 !important;
+}
+.bg-dark {
+    background-color: rgba(24,28,33,0.9) !important;
+}
+.ui-bg-overlay-container>*, .ui-bg-video-container>* {
+    position: relative;
+}
+@media (min-width: 992px){
+    .container, .container-fluid {
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+}
+.media, .media>:not(.media-body), .jumbotron, .card {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}
+.d-flex, .d-inline-flex, .media, .media>:not(.media-body), .jumbotron, .card {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}
+.ui-w-100 {
+    width: 100px !important;
+    height: auto;
+}
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+.opacity-75 {
+    opacity: .75 !important;
+}
+.tabs-alt.nav-tabs .nav-link.active, .tabs-alt.nav-tabs .nav-link.active:hover, .tabs-alt.nav-tabs .nav-link.active:focus, .tabs-alt>.nav-tabs .nav-link.active, .tabs-alt>.nav-tabs .nav-link.active:hover, .tabs-alt>.nav-tabs .nav-link.active:focus {
+    -webkit-box-shadow: 0 -2px 0 #26B4FF inset;
+    box-shadow: 0 -2px 0 #26B4FF inset;
+}
+
+.nav-tabs:not(.nav-fill):not(.nav-justified) .nav-link, .nav-pills:not(.nav-fill):not(.nav-justified) .nav-link {
+    margin-right: .125rem;
+}
+.nav-tabs.tabs-alt .nav-link, .tabs-alt>.nav-tabs .nav-link {
+    border-width: 0 !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+}
+.nav-tabs .nav-link.active {
+    border-bottom-color: #fff;
+}
+                                    
+</style>
+<div class="ui-bg-cover ui-bg-overlay-container text-white" style="background:#00BFFF;">
+    <div class="ui-bg-overlay bg-dark opacity-50"></div>
+    <div class="container py-5">
+        <div class="media col-md-10 col-lg-8 col-xl-7 p-0 my-4 mx-auto">
+            <img src="{{user.profile.image.url}}" alt class="d-block ui-w-100 rounded-circle">
+            <div class="media-body ml-5">
+                <h4 class="font-weight-bold mb-4">{{user.username}}</h4>
+                <div class="opacity-75 mb-4">
+                    Playlists: <strong>{{plcount}}</strong>
+                </div>
+                <a href="#" class="d-inline-block text-white">
+                    <strong>{{user.profile.followers.all|length}}</strong>
+                    <span class="opacity-75">followers</span>
+                </a>
+                <a href="#" class="d-inline-block text-white ml-3">
+                    <strong>{{user.profile.following.all|length}}</strong>
+                    <span class="opacity-75">following</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-bg-overlay-container">
+        <div class="ui-bg-overlay bg-dark opacity-25"></div>
+        <ul class="nav nav-tabs  justify-content-center border-transparent">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#home">Playlists</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#menu1">Followers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#menu2">Following</a>
+            </li>
+        </ul>
+    
+    <div class="tab-content">
+            <div id="home" class="container tab-pane active"><br>
+                {% for p in playlists%}
+                    <div class="card my-3" style="width: 18rem;">
+                    <img class="card-img-top" src="{{p.logo.url}}" alt="Card image cap">
+                    <div class="card-body">
+                        <strong><h5 class="card-title text-primary">{{p.title}}</h5></strong>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    </div>
+                {%endfor%}
+            </div>
+            <div id="menu1" class="container tab-pane fade"><br>
+                <h3>Menu 1</h3>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+            </div>
+            <div id="menu2" class="container tab-pane fade"><br>
+                <h3>Menu 2</h3>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+        </div>
+        </div>
+</div>
+{%endblock%}

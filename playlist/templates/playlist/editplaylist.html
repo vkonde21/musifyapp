@@ -1,0 +1,81 @@
+{% extends 'login/basic.html' %} {% block title%}editplaylist{{album.pid}}{% endblock %} {% block body %}
+
+<div class="fluid-container">
+        
+            <div class="row mt-3 mx-3">
+                <!--Left Panel-->
+                <!--Album view-->
+                <div class="col-md-3">
+                    
+                    <div class="panel panel-default">
+                        
+                        <div class="panel-body">
+
+                            <img src="{{ album.logo.url }}" alt="" width="280" height="280"/>
+                            <h1>{{ album.title }}</h1>
+                            
+                            
+                        </div>
+                        
+                    </div>
+                    <!--End of Left Panel-->
+                </div>
+                 <!--Right View-->
+                    <div class="col-sm-8 col-md-9">
+
+                            <a class="btn btn-primary"href="/home">View All</a></li>
+                                <a href="/addsong/{{album.pid}}" class="btn btn-secondary mx-3"style="font-weight: bold">
+                                    <span class="fa fa-plus"></span>
+                                    New Song
+                                </a>
+                        {% if songs%}
+                        <div class="panel panel-default mx-4 my-4">
+
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Audio File</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for song in songs%}
+                                            <tr>
+                                                <td>{{ song.title }}</td>
+                                            <td>
+                                             <a target="_blank" href="{{ song.mp3.url }}">
+                                                <button type="button" class="btn btn-success btn-xs">
+                                                    <span class="fa fa-play"></span>&nbsp; Play
+                                                </button>
+                                             </a>
+                                            </td>
+
+                                            <td>
+
+                                            <a class="btn btn-danger" href="/deletesong/{{album.pid}}/{{song.sid}}">
+                                            <span class="fa fa-trash"></span>
+                                        </a>
+
+									<a class="btn btn-secondary" href="/updatesong/{{album.pid}}/{{song.sid}}">
+                                            <span class="fas fa-edit"></span>
+                                        </a>
+
+
+                                            </td>
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+                
+            </div>
+            {% endif %}
+        </div>
+        
+{% endblock %}

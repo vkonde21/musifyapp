@@ -1,0 +1,28 @@
+{% extends 'login/basic.html' %} {% block title %} Songform {% endblock %} {%load crispy_forms_tags%} {% block body %}
+<div class="container" style="margin-top: 3%; margin-left: 3%">
+    <div class="row p-3 mb-2 bg-dark text-white">
+        <div class="col-md-6" style="margin-top: 1%">
+            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class='border-bottom mb-4'>
+                        Add Song
+                    </legend>
+                    {{form | crispy}}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">
+                    {% if update %}
+                    Update Song</button>
+                    {% else %}
+                    Add Song</button>
+                    {%endif%}
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'login/basic.html' %} {% block title%}homepage{% endblock %} {% block body %}
+
+<style>
+    img {
+        border: 1px solid #ddd;
+        /* Gray border */
+        border-radius: 4px;
+        /* Rounded border */
+    }
+    /* Add a hover effect (blue shadow) */
+    
+    img:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+<div class="container">
+    <div class="rows">
+        {% if playlist_list %}
+        <div class='col-md-3'>
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    {% for album in playlist_list %}
+                    <!--a href='#' class='thumbnail my-3'>
+                        <img src='{{album.logo.url}}' style='height:200px;width:300px'>
+                        <p style="padding:10px;color:blue;font-size:20px;font-family:'Permanent Marker'">
+                            <strong>{{album.title}}</strong><br>
+                        </p>
+                        <button class="btn btn-primary" type="button">
+                                View Details
+                            </button>
+                    </a-->
+                    <div class="card my-3" style="width: 18rem;">
+                        <img class="card-img-top" src="{{album.logo.url}}" style="height:300px" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{album.title}}</h5>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                            <a class="btn btn-danger" href="/editplaylist/{{album.pid}}">
+                                <span class="fas fa-edit"></span>
+                            </a>
+                            <a class="btn btn-danger" href="/deleteplaylist/{{album.pid}}">
+                                <span class="fa fa-trash"></span>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <a class="btn btn-outline-info mt-3" href="/createplaylist">+ Add PlayList</a>
+
+    </div>
+</div>
+</div>
+{% endblock %}
