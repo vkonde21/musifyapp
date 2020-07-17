@@ -1,2 +1,6 @@
-# musifyapp
-This app is build using django at backend
+# Musifyapp
+## Requirements:
+- Python 3.7
+- django
+- django rest framework
+- crispy_forms
