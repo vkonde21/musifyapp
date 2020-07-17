@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import homepage, createplaylist, Playlists, EditPlaylist, addsong, updatesong, deletesong, deleteplaylist, searchuser, followuser, unfollowuser, userdashboard
+from .views import sortbydate, homepage, createplaylist, Playlists, EditPlaylist, addsong, updatesong, deletesong, deleteplaylist, searchuser, followuser, unfollowuser, userdashboard, copysong, transfersong, copysongtoplay, transfersongtoplay
 app_name = "playlist"
 urlpatterns = [
     path('home/', Playlists.as_view(), name="home" ),
@@ -12,6 +12,11 @@ urlpatterns = [
     path('searchuser', searchuser, name="searchuser"),
     path('follow/<int:userid>', followuser, name="followuser"),
     path('unfollow/<int:userid>', unfollowuser, name="unfollowuser"),
-    path('userdashboard/<int:userid>', userdashboard, name="userdahboard")
+    path('userdashboard/<int:userid>', userdashboard, name="userdahboard"),
+    path("copysong/<int:pid>", copysong, name="copysong"),
+    path("transfersong/<int:pid>", transfersong, name="transfersong"),
+    path("copysongtoplay/<int:pid>", copysongtoplay, name="copysongtoplay"),
+    path("transfersongtoplay/<int:pid>", transfersongtoplay, name="transfersongtoplay"),
+    path("sortbydate/<int:pid>", sortbydate, name="sortbydate")
 
 ]

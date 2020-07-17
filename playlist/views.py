@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import User
 from django.db.models import Q
+import json
 # Create your views here.
 def homepage(request):
     return render(request, 'playlist/home.html')
@@ -16,9 +17,15 @@ def homepage(request):
 def createplaylist(request):
     if(request.method == "POST"):
         form = PlaylistForm(request.POST or None, request.FILES or None)
+        p = Playlist.objects.filter(user = request.user)
         if form.is_valid():
             new = form.save(commit=False)
             new.user = request.user
+            #Each playlist should have different title
+            for play in p:
+                if(play.title == new.title):
+                    messages.warning(request, f"Playlist with {play.title} as title already exists!")
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
             new.save()
             messages.success(request, new.title + " playlist created successfully!!")
             return redirect("/home")
@@ -114,6 +121,80 @@ def userdashboard(request, userid):
     if(request.user in followers):
         pl = p.filter(Q(status = 1) | Q(status = 2))
     return render(request, "playlist/userdashboard.html", {"user":user, "playlists":pl, "plcount":playlistcount})
+
+@login_required
+def copysong(request, pid):
+    #returns pid, lists of playlists, list of song for each playlist
+    albumid = pid
+    album = Playlist.objects.filter(pid = pid)
+    playlists = Playlist.objects.filter(user = request.user).exclude(pid = pid)
+    songdict = {}
+    for p in playlists:
+        l = []
+        if(p.pid != pid):
+            for k in p.songs.all():
+                if(k not in album[0].songs.all()): #do not show list of songs which are already present in the current playlist
+                    l.append([k.title, k.sid])
+            songdict["playlist" + p.title] = l
+    #songdict = str(songdict)
+    #songdict = songdict.replace("'",'"')
+    
+    return render(request, "playlist/copysong.html", {"albumid":albumid, "playlists":playlists, "songdict":songdict, "copysong":1})
+
+
+@login_required
+def copysongtoplay(request, pid):
+    l = [int(i) for i in request.POST.getlist("choices[]")] #id of songs to be copied
+    p = Playlist.objects.get(pid = pid)
+    for x in l:
+        s = Song.objects.filter(sid = x)
+        p.songs.add(s[0])
+    messages.success(request, "Songs copied successfully")
+    return redirect(f"/editplaylist/{pid}")
+    #print(request.POST.get("category"))
+
+@login_required
+def transfersong(request, pid):
+    albumid = pid
+    playlists = Playlist.objects.filter(user = request.user).exclude(pid = pid)
+    print(playlists)
+    album = Playlist.objects.filter(pid=pid)
+    songs = album[0].songs.all()
+    return render(request, "playlist/transfersong.html", {"albumid": albumid, "playlists": playlists, "songs": songs, })
+
+
+@login_required
+def transfersongtoplay(request, pid):
+    lp = [int(i) for i in request.POST.getlist(
+        "choices[]")]  # id of playlists in which selected songs are to be copied
+    print(lp)
+    ls = [int(i) for i in request.POST.getlist("songs")]
+    s = []
+    for x in ls:
+        q = Song.objects.get(sid = x)
+        s.append(q)
+    print(s)
+    
+    for p in lp:
+        play = Playlist.objects.get(pid = p)
+        for d in s:
+            if(d not in play.songs.all()):
+                play.songs.add(d)
+            else:
+                messages.warning(request, f"{d.title} song already present in current playlist!")
+    #delete the song from current playlist
+    for d in s:
+        Playlist.objects.get(pid = pid).songs.remove(d)
+    messages.success(request, "Songs transferred successfully")
+    return redirect(f"/editplaylist/{pid}")
+
+
+@login_required
+def sortbydate(request, pid):
+    songs = Playlist.objects.get(pid = pid).songs.all()
+    songs = songs.order_by("-date_added")
+    album = Playlist.objects.get(pid = pid)
+    return render(request, "playlist/editplaylist.html", {"songs":songs, "album":album})
 
 class Playlists(ListView):
     model = Playlist

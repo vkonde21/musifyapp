@@ -1,0 +1,38 @@
+{% extends 'login/basic.html' %} {%block head%}
+<style type="text/css">
+    form.demoForm {
+        margin: 2em 0 3em;
+    }
+    
+    form.demoForm select {
+        vertical-align: top;
+        margin-right: 1em;
+    }
+    
+    select#choices {
+        min-width: 140px;
+    }
+    
+</style>
+{%endblock%} {%block title%}Transfer song {{albumid}}{% endblock%} {%block body%}
+<div class="container" >
+<form action="/transfersongtoplay/{{albumid}}" method="post" id="demoForm" class="demoForm">
+    {% csrf_token %}
+    <strong>Select Songs:</strong>
+    <select name="songs" multiple="multiple" class="form-control col-md-6 mt-3 mb-3"> <!--list of playists-->
+    {% for s in songs%}
+    <option value="{{s.sid}}">{{s.title}}</option>
+    {% endfor %}
+    </select>
+    <p class="text-muted">Press Ctrl for selecting multiple songs</p> 
+    <strong>Select Playlists:</strong>
+    <select name="choices[]" id="choices" multiple="multiple" size="4" class="form-control col-md-6 mt-3 mb-3">
+    {% for p in playlists %}
+    <option value="{{p.pid}}">{{p.title}}</option>
+    {% endfor %}
+    </select>
+    <p class="text-muted">Press Ctrl for selecting multiple playists</p> 
+    <button type="submit" class="btn btn-outline-success">Transfer songs</button>
+</form>
+</div>
+{%endblock%} 

@@ -37,7 +37,7 @@
                             <a class="btn btn-danger" href="/editplaylist/{{album.pid}}">
                                 <span class="fas fa-edit"></span>
                             </a>
-                            <a class="btn btn-danger" href="/deleteplaylist/{{album.pid}}">
+                            <a class="btn btn-danger" href="/deleteplaylist/{{album.pid}}" onclick="return confirm('Are you sure you want to delete this playlist')">
                                 <span class="fa fa-trash"></span>
                             </a>
                         </div>

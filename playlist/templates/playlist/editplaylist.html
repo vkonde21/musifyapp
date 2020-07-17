@@ -21,13 +21,34 @@
                     <!--End of Left Panel-->
                 </div>
                  <!--Right View-->
-                    <div class="col-sm-8 col-md-9">
-
+                    <div class="col-sm-8 col-md-9 ">
+                        <div class="row">
                             <a class="btn btn-primary"href="/home">View All</a></li>
                                 <a href="/addsong/{{album.pid}}" class="btn btn-secondary mx-3"style="font-weight: bold">
                                     <span class="fa fa-plus"></span>
                                     New Song
                                 </a>
+                                <a href="/copysong/{{album.pid}}" class="btn btn-danger"style="font-weight: bold">
+                                    <span class="fa fa-clone"></span>
+                                    Copy Songs
+                                </a>
+                                <a href="/transfersong/{{album.pid}}" class="btn btn-success mx-3"style="font-weight: bold">
+                                    <span class="fas fa-file-export"></span>
+                                    Transfer Songs
+                                </a>
+                                <div class="dropdown show">
+                                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-sort"></span>
+                                    Sort Songs
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="/sortbydate/{{album.pid}}" onchange="this.form.submit()">Date Added</a>
+                                    <a class="dropdown-item" href="#" onchange="this.form.submit()">Another action</a>
+                                    <a class="dropdown-item" href="#" onchange="this.form.submit()">Something else here</a>
+                                </div>
+                                </div>
+                                </div>
                         {% if songs%}
                         <div class="panel panel-default mx-4 my-4">
 
@@ -43,7 +64,7 @@
                                     <tbody>
                                         {% for song in songs%}
                                             <tr>
-                                                <td>{{ song.title }}</td>
+                                                <td><strong>{{ song.title }}</strong></td>
                                             <td>
                                              <a target="_blank" href="{{ song.mp3.url }}">
                                                 <button type="button" class="btn btn-success btn-xs">

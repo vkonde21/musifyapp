@@ -13,6 +13,7 @@ class Song(models.Model):
     artist = models.CharField(max_length=1000)
     mp3 = models.FileField('Track File',upload_to="track/")
     status = models.IntegerField(choices=CHOICES, default=0)
+    date_added = models.DateTimeField(default=timezone.now(), blank=True, null=True)
     objects = models.Manager()
     def __str__(self):
         return self.title
