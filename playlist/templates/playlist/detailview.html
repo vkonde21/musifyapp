@@ -1,0 +1,89 @@
+{% extends 'login/basic.html'%}
+{% block title%} DetailView {{album.pid}}{%endblock%}
+{% block body %}
+<div class="container">
+{% if public_songs %}
+    <h1 style="color:pink">Public Songs</h1>
+    <table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Song Title</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Audio File</th>
+    </tr>
+  </thead>
+   <tbody>
+  {% for p in public_songs %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{p.title}}</td>
+      <td>{{p.artist}}</td>
+      <td><a target="_blank" href="{{ p.mp3.url }}">
+                <button type="button" class="btn btn-success btn-xs">
+                    <span class="fa fa-play"></span>&nbsp; Play
+                </button>
+            </a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if follower_songs %}
+    <h1 style="color:pink">Onlyfollower Songs</h1>
+    <table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Song Title</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Audio File</th>
+    </tr>
+  </thead>
+   <tbody>
+  {% for p in follower_songs %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{p.title}}</td>
+      <td>{{p.artist}}</td>
+      <td><a target="_blank" href="{{ p.mp3.url }}">
+                <button type="button" class="btn btn-success btn-xs">
+                    <span class="fa fa-play"></span>&nbsp; Play
+                </button>
+            </a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if private_songs %}
+    <h1 style="color:pink">Private Songs</h1>
+    <table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Song Title</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Audio File</th>
+    </tr>
+  </thead>
+   <tbody>
+  {% for p in private_songs %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{p.title}}</td>
+      <td>{{p.artist}}</td>
+      <td><a target="_blank" href="{{ p.mp3.url }}">
+                <button type="button" class="btn btn-success btn-xs">
+                    <span class="fa fa-play"></span>&nbsp; Play
+                </button>
+            </a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+</div>
+{% endblock %}

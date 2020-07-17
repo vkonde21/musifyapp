@@ -1,20 +1,23 @@
 {%extends 'login/basic.html' %} {%load crispy_forms_tags%} {%block body%}
-<div class="container">
-    <form method="POST">
-        {%csrf_token%}
-        <fieldset class="form-group">
-            <legend class='border-bottom mb-4'>
-                Join Today
-            </legend>
-            {{form | crispy}}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Sign Up</button>
-        </div>
+<div class="container" style="margin-top: 3%; margin-left: 3%">
+    <div class="row p-3 mb-2 bg-dark text-white">
+        <form method="POST">
+            {%csrf_token%}
+            <fieldset class="form-group">
+                <legend class='border-bottom mb-4'>
+                    Join Today
+                </legend>
+                {{form | crispy}}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Sign Up</button>
+            </div>
 
-    </form>
-    <div class="border-top pt-3">
+        </form>
+        <br>
+        <div class="border-top pt-3"></div>
         <small class="text-muted">Already have an account?<a class="ml-2" href="/login">Sign In</a></small>
     </div>
+</div>
 </div>
 {%endblock body%}

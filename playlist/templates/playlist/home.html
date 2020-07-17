@@ -33,7 +33,7 @@
                         <img class="card-img-top" src="{{album.logo.url}}" style="height:300px" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">{{album.title}}</h5>
-                            <a href="#" class="btn btn-primary">View Details</a>
+                            <a href="/detailview/{{request.user.id}}/{{album.pid}}" class="btn btn-primary">View Details</a>
                             <a class="btn btn-danger" href="/editplaylist/{{album.pid}}">
                                 <span class="fas fa-edit"></span>
                             </a>
@@ -47,7 +47,9 @@
             </div>
         </div>
         {% endif %}
-        <a class="btn btn-outline-info mt-3" href="/createplaylist">+ Add PlayList</a>
+        {% if user.is_authenticated %}
+        <a class="btn btn-info mt-3" href="/createplaylist">+ Add PlayList</a>
+        {% endif%}
 
     </div>
 </div>

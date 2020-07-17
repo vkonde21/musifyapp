@@ -5,11 +5,21 @@ from login.models import Profile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list import ListView
-from django.views.generic.edit import FormView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from django.db.models import Q
-import json
+from django.db.models.functions import Lower
+from .serializers import playlistsongserializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 # Create your views here.
+
+
+AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
+
+
 def homepage(request):
     return render(request, 'playlist/home.html')
 
@@ -21,6 +31,11 @@ def createplaylist(request):
         if form.is_valid():
             new = form.save(commit=False)
             new.user = request.user
+            file_type = new.logo.url.split(".")[-1]
+            file_type = file_type.lower()
+            if file_type not in IMAGE_FILE_TYPES:
+                messages.error(request, "Image file must be jpg, jpeg or png!")
+                return render(request, "playlist/createplaylist.html", {"form": form})
             #Each playlist should have different title
             for play in p:
                 if(play.title == new.title):
@@ -45,9 +60,14 @@ def addsong(request, pk):
         form = SongForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             #check audiofile extensions
-            form.save(commit = False)
+            f = form.save(commit = False)
             x = Playlist.objects.get(pid = pk)
             s = Song(title = request.POST.get("title"), artist = request.POST.get("artist"), mp3 = request.FILES.get("mp3"), status = request.POST.get("status"))
+            file_type = f.mp3.url.split('.')[-1]
+            file_type = file_type.lower()
+            if file_type not in AUDIO_FILE_TYPES:
+                messages.error(request, "Audio file must be WAV, MP3, or OGG!")
+                return render(request, "playlist/songform.html", {"form": form})
             s.save()
             x.songs.add(s)
             messages.success(request, s.title +
@@ -77,6 +97,31 @@ def updatesong(request, pid, pk):
         s = Song.objects.get(sid=pk)
         form = UpdateSongForm(instance = s )
         return render(request, "playlist/songform.html", {"form": form, "update":1})
+
+
+def updateplaylist(request, pid):
+    if(request.method == "POST"):
+        s = Playlist.objects.get(pid = pid)
+        form = UpdatePlaylistForm(request.POST, request.FILES, instance=s)
+        if form.is_valid():
+            new = form.save(commit=False)
+            new.user = request.user
+            file_type = new.logo.url.split(".")[-1]
+            file_type = file_type.lower()
+            if file_type not in IMAGE_FILE_TYPES:
+                messages.error(request, "Image file must be jpg, jpeg or png!")
+                return render(request, "playlist/createplaylist.html", {"form": form, "update":1})
+            new.save()
+            messages.success(request, new.title +
+                             " playlist updated successfully!!")
+            return redirect(f"/editplaylist/{pid}")
+        else:
+            messages.error(request, "Playlist could not be updated!!")
+            return redirect(f"/editplaylist/{pid}")
+    else:
+        s = Playlist.objects.get(pid = pid)
+        form = UpdatePlaylistForm(instance=s)
+        return render(request, "playlist/createplaylist.html", {"form": form, "update": 1})
 
 def deletesong(request, pid, pk):
     x = Playlist.objects.get(pid = pid)
@@ -136,8 +181,6 @@ def copysong(request, pid):
                 if(k not in album[0].songs.all()): #do not show list of songs which are already present in the current playlist
                     l.append([k.title, k.sid])
             songdict["playlist" + p.title] = l
-    #songdict = str(songdict)
-    #songdict = songdict.replace("'",'"')
     
     return render(request, "playlist/copysong.html", {"albumid":albumid, "playlists":playlists, "songdict":songdict, "copysong":1})
 
@@ -151,7 +194,6 @@ def copysongtoplay(request, pid):
         p.songs.add(s[0])
     messages.success(request, "Songs copied successfully")
     return redirect(f"/editplaylist/{pid}")
-    #print(request.POST.get("category"))
 
 @login_required
 def transfersong(request, pid):
@@ -167,13 +209,11 @@ def transfersong(request, pid):
 def transfersongtoplay(request, pid):
     lp = [int(i) for i in request.POST.getlist(
         "choices[]")]  # id of playlists in which selected songs are to be copied
-    print(lp)
     ls = [int(i) for i in request.POST.getlist("songs")]
     s = []
     for x in ls:
         q = Song.objects.get(sid = x)
         s.append(q)
-    print(s)
     
     for p in lp:
         play = Playlist.objects.get(pid = p)
@@ -195,6 +235,21 @@ def sortbydate(request, pid):
     songs = songs.order_by("-date_added")
     album = Playlist.objects.get(pid = pid)
     return render(request, "playlist/editplaylist.html", {"songs":songs, "album":album})
+
+@login_required
+def sortbyartist(request, pid):
+    songs = Playlist.objects.get(pid=pid).songs.all()
+    songs = songs.order_by(Lower("artist"))
+    album = Playlist.objects.get(pid=pid)
+    return render(request, "playlist/editplaylist.html", {"songs": songs, "album": album})
+
+
+@login_required
+def sortbytitle(request, pid):
+    songs = Playlist.objects.get(pid=pid).songs.all()
+    songs = songs.order_by(Lower("title"))
+    album = Playlist.objects.get(pid=pid)
+    return render(request, "playlist/editplaylist.html", {"songs": songs, "album": album})
 
 class Playlists(ListView):
     model = Playlist
@@ -221,6 +276,41 @@ class EditPlaylist(ListView):
         data['album'] = playlistid(self.kwargs['pk'])
         return data
 
+class ViewPlaylist(DetailView):
+    model = Playlist
+    template_name = "playlist/detailview.html"
+    #include userid also while viewing albums
+    def get_context_data(self, *args, **kwargs):
+        context = super(ViewPlaylist,
+                        self).get_context_data(*args, **kwargs)
+        album = Playlist.objects.get(pid=self.kwargs['pk'])
+        private_songs = album.songs.filter(status = 0)
+        public_songs = album.songs.filter(status = 1)
+        follower_songs = album.songs.filter(status = 2)
+        context["album"] = album
+        context["private_songs"] = private_songs
+        context["public_songs"] = public_songs
+        context["follower_songs"] = follower_songs
+        if(self.request.user.id != self.kwargs['userid']):
+            l = User.objects.get(id = self.kwargs['userid'])
+            followers = l.profile.followers.all()
+            if(self.request.user in followers):
+                context["private_songs"] = []
+                return context
+            else:
+                context["private_songs"] = []
+                context["follower_songs"] = []
+                return context
+
+        return context
+
+
+class playsonglist(APIView):
+    #get method returns all playlists
+    def get(self, *args):
+        playlist = Playlist.objects.all()
+        serializer = playlistsongserializer(playlist, many = True)
+        return Response(serializer.data)
 def searchuser(request):
     user = request.GET.get("searchuser")
     print(user)

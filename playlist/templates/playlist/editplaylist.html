@@ -1,6 +1,12 @@
-{% extends 'login/basic.html' %} {% block title%}editplaylist{{album.pid}}{% endblock %} {% block body %}
+{% extends 'login/basic.html' %} 
+{%block head%}
+<style>
 
-<div class="fluid-container">
+</style>
+{% endblock%}
+{% block title%}editplaylist{{album.pid}}{% endblock %} {% block body %}
+
+<div class="fluid-container" >
         
             <div class="row mt-3 mx-3">
                 <!--Left Panel-->
@@ -12,8 +18,8 @@
                         <div class="panel-body">
 
                             <img src="{{ album.logo.url }}" alt="" width="280" height="280"/>
-                            <h1>{{ album.title }}</h1>
-                            
+                            <h1 style="color:#ff33be">{{ album.title }}</h1>
+                            <a class="btn btn-info" href="/updateplaylist/{{album.pid}}">Edit Details</a>
                             
                         </div>
                         
@@ -44,19 +50,20 @@
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="/sortbydate/{{album.pid}}" onchange="this.form.submit()">Date Added</a>
-                                    <a class="dropdown-item" href="#" onchange="this.form.submit()">Another action</a>
-                                    <a class="dropdown-item" href="#" onchange="this.form.submit()">Something else here</a>
+                                    <a class="dropdown-item" href="/sortbyartist/{{album.pid}}" onchange="this.form.submit()">Artist</a>
+                                    <a class="dropdown-item" href="/sortbytitle/{{album.pid}}" onchange="this.form.submit()">Title</a>
                                 </div>
                                 </div>
                                 </div>
                         {% if songs%}
                         <div class="panel panel-default mx-4 my-4">
 
-                            <div class="panel-body">
-                                <table class="table">
+                            <div class="panel-body" >
+                                <table class="table" style="color:#77ff33" >
                                     <thead>
                                         <tr>
                                             <th>Title</th>
+                                            <th>Artist Name</th>
                                             <th>Audio File</th>
                                             <th>Actions</th>
                                         </tr>
@@ -65,6 +72,7 @@
                                         {% for song in songs%}
                                             <tr>
                                                 <td><strong>{{ song.title }}</strong></td>
+                                                <td><strong>{{ song.artist }}</strong></td>
                                             <td>
                                              <a target="_blank" href="{{ song.mp3.url }}">
                                                 <button type="button" class="btn btn-success btn-xs">

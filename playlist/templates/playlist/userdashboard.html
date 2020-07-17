@@ -1,80 +1,110 @@
-{% extends 'login/basic.html' %}
-{%block title%}{{user.username}}{{user.id}}{%endblock%}
-{%block body%}
+{% extends 'login/basic.html' %} {%block title%}{{user.username}}{{user.id}}{%endblock%} {%block body%}
 <style>
-.text-white {
-    color: #fff !important;
-}
-.ui-bg-overlay-container, .ui-bg-video-container {
-    position: relative;
-}
-.ui-bg-cover {
-    background-color: transparent;
-    background-position: center center;
-    background-size: cover;
-}
-.ui-bg-overlay-container .ui-bg-overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: block;
-}
-
-.bg-dark {
-    background-color: rgba(24,28,33,0.9) !important;
-}
-.opacity-50 {
-    opacity: .5 !important;
-}
-.bg-dark {
-    background-color: rgba(24,28,33,0.9) !important;
-}
-.ui-bg-overlay-container>*, .ui-bg-video-container>* {
-    position: relative;
-}
-@media (min-width: 992px){
-    .container, .container-fluid {
-        padding-right: 2rem;
-        padding-left: 2rem;
+    .text-white {
+        color: #fff !important;
     }
-}
-.media, .media>:not(.media-body), .jumbotron, .card {
-    -ms-flex-negative: 1;
-    flex-shrink: 1;
-}
-.d-flex, .d-inline-flex, .media, .media>:not(.media-body), .jumbotron, .card {
-    -ms-flex-negative: 1;
-    flex-shrink: 1;
-}
-.ui-w-100 {
-    width: 100px !important;
-    height: auto;
-}
-.font-weight-bold {
-    font-weight: 700 !important;
-}
-.opacity-75 {
-    opacity: .75 !important;
-}
-.tabs-alt.nav-tabs .nav-link.active, .tabs-alt.nav-tabs .nav-link.active:hover, .tabs-alt.nav-tabs .nav-link.active:focus, .tabs-alt>.nav-tabs .nav-link.active, .tabs-alt>.nav-tabs .nav-link.active:hover, .tabs-alt>.nav-tabs .nav-link.active:focus {
-    -webkit-box-shadow: 0 -2px 0 #26B4FF inset;
-    box-shadow: 0 -2px 0 #26B4FF inset;
-}
-
-.nav-tabs:not(.nav-fill):not(.nav-justified) .nav-link, .nav-pills:not(.nav-fill):not(.nav-justified) .nav-link {
-    margin-right: .125rem;
-}
-.nav-tabs.tabs-alt .nav-link, .tabs-alt>.nav-tabs .nav-link {
-    border-width: 0 !important;
-    border-radius: 0 !important;
-    background-color: transparent !important;
-}
-.nav-tabs .nav-link.active {
-    border-bottom-color: #fff;
-}
-                                    
+    
+    .ui-bg-overlay-container,
+    .ui-bg-video-container {
+        position: relative;
+    }
+    
+    .ui-bg-cover {
+        background-color: transparent;
+        background-position: center center;
+        background-size: cover;
+    }
+    
+    .ui-bg-overlay-container .ui-bg-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: block;
+    }
+    
+    .bg-dark {
+        background-color: rgba(24, 28, 33, 0.9) !important;
+    }
+    
+    .opacity-50 {
+        opacity: .5 !important;
+    }
+    
+    .bg-dark {
+        background-color: rgba(24, 28, 33, 0.9) !important;
+    }
+    
+    .ui-bg-overlay-container>*,
+    .ui-bg-video-container>* {
+        position: relative;
+    }
+    
+    @media (min-width: 992px) {
+        .container,
+        .container-fluid {
+            padding-right: 2rem;
+            padding-left: 2rem;
+        }
+    }
+    
+    .media,
+    .media>:not(.media-body),
+    .jumbotron,
+    .card {
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+    }
+    
+    .d-flex,
+    .d-inline-flex,
+    .media,
+    .media>:not(.media-body),
+    .jumbotron,
+    .card {
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+    }
+    
+    .ui-w-100 {
+        width: 100px !important;
+        height: auto;
+    }
+    
+    .font-weight-bold {
+        font-weight: 700 !important;
+    }
+    
+    .opacity-75 {
+        opacity: .75 !important;
+    }
+    
+    .tabs-alt.nav-tabs .nav-link.active,
+    .tabs-alt.nav-tabs .nav-link.active:hover,
+    .tabs-alt.nav-tabs .nav-link.active:focus,
+    .tabs-alt>.nav-tabs .nav-link.active,
+    .tabs-alt>.nav-tabs .nav-link.active:hover,
+    .tabs-alt>.nav-tabs .nav-link.active:focus {
+        -webkit-box-shadow: 0 -2px 0 #26B4FF inset;
+        box-shadow: 0 -2px 0 #26B4FF inset;
+    }
+    
+    .nav-tabs:not(.nav-fill):not(.nav-justified) .nav-link,
+    .nav-pills:not(.nav-fill):not(.nav-justified) .nav-link {
+        margin-right: .125rem;
+    }
+    
+    .nav-tabs.tabs-alt .nav-link,
+    .tabs-alt>.nav-tabs .nav-link {
+        border-width: 0 !important;
+        border-radius: 0 !important;
+        background-color: transparent !important;
+    }
+    
+    .nav-tabs .nav-link.active {
+        border-bottom-color: #fff;
+    }
 </style>
 <div class="ui-bg-cover ui-bg-overlay-container text-white" style="background:#00BFFF;">
     <div class="ui-bg-overlay bg-dark opacity-50"></div>
@@ -111,17 +141,17 @@
                 <a class="nav-link" data-toggle="tab" href="#menu2">Following</a>
             </li>
         </ul>
-    
-    <div class="tab-content">
-            <div id="home" class="container tab-pane active"><br>
-                {% for p in playlists%}
-                    <div class="card my-3" style="width: 18rem;">
+
+        <div class="tab-content">
+            <div id="home" class="container tab-pane active"><br> {% for p in playlists%}
+                <div class="card my-3" style="width: 18rem;">
                     <img class="card-img-top" src="{{p.logo.url}}" alt="Card image cap">
                     <div class="card-body">
                         <strong><h5 class="card-title text-primary">{{p.title}}</h5></strong>
-                        <a href="#" class="btn btn-primary">Go somewhere</a> <!--Details page-->
+                        <a href="/detailview/{{user.id}}/{{p.pid}}" class="btn btn-primary">View Details</a>
+                        <!--Details page-->
                     </div>
-                    </div>
+                </div>
                 {%endfor%}
             </div>
             <div id="menu1" class="container tab-pane fade"><br>
@@ -134,6 +164,6 @@
                 <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
             </div>
         </div>
-        </div>
+    </div>
 </div>
 {%endblock%}

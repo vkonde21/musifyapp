@@ -1,90 +1,86 @@
-{% extends 'login/basic.html' %}
-{%block head%}
+{% extends 'login/basic.html' %} {%block head%}
 <style type="text/css">
-
-form.demoForm {
-    margin: 2em 0 3em;
-}
-
-form.demoForm select {
-    vertical-align: top;
-    margin-right: 1em;
-}
-
-select#choices {
-    min-width: 140px;
-}
-
+    form.demoForm {
+        margin: 2em 0 3em;
+    }
+    
+    form.demoForm select {
+        vertical-align: top;
+        margin-right: 1em;
+    }
+    
+    select#choices {
+        min-width: 140px;
+    }
 </style>
-{%endblock%}
-{%block title%}Copy song {{albumid}}{% endblock%}
-{%block body%}
+{%endblock%} {%block title%}Copy song {{albumid}}{% endblock%} {%block body%}
 <!--copysongtoplaylist/{{album.id}}-->
-<div class="container" >
-<form action="/copysongtoplay/{{albumid}}" method="post" id="demoForm" class="demoForm">
-{% csrf_token %}
-    <strong>Select playlist:</strong>
-    <select name="category" class="form-control col-md-6 mt-3 mb-3"> <!--list of playists-->
+<div class="container" style="margin-top: 3%; margin-left: 3%">
+    <div class="row p-3 mb-2 bg-dark text-white">
+        <form action="/copysongtoplay/{{albumid}}" method="post" id="demoForm" class="demoForm">
+            {% csrf_token %}
+            <strong>Select playlist:</strong>
+            <select name="category" class="form-control col-md-6 mt-3 mb-3"> <!--list of playists-->
     {% for p in playlists%}
     <option value="playlist{{p.title}}">{{p.title}}</option>
     {% endfor %}
     </select>
-    <strong>Select songs:</strong>
-    <select name="choices[]" id="choices" multiple="multiple" class="form-control col-md-6 my-3">
+            <strong>Select songs:</strong>
+            <select name="choices[]" id="choices" multiple="multiple" class="form-control col-md-6 my-3">
     <!-- js populates -->
     </select>
-    <p class="text-muted">Press Ctrl for selecting multiple songs</p>  
-    <button type="submit" class="btn btn-outline-success my-3">Copy songs</button>
-</form>
+            <p class="text-muted">Press Ctrl for selecting multiple songs</p>
+            <button type="submit" class="btn btn-outline-success my-3">Copy songs</button>
+        </form>
+    </div>
 </div>
-{%endblock%}
-{% block js%}
+{%endblock%} {% block js%}
 <script>
-function appendDataToSelect(sel, obj) {
-    
-    for (var i = 0; i < obj.length; i++) { 
-                var optn = obj[i]; 
-                var el = document.createElement("option"); 
-                el.textContent = optn[0]; 
-                el.value = optn[1]; 
-                sel.appendChild(el); 
+    function appendDataToSelect(sel, obj) {
+
+        for (var i = 0; i < obj.length; i++) {
+            var optn = obj[i];
+            var el = document.createElement("option");
+            el.textContent = optn[0];
+            el.value = optn[1];
+            sel.appendChild(el);
 
 
-}
-};
+        }
+    };
 
-document.forms['demoForm'].elements['category'].onchange = function(e) {
-    // name of associated select list
-    var relName = 'choices[]';
-    
-    // reference to associated select list 
-    var relList = this.form.elements[ relName ];
-    
-    // get data from object literal based on selection in controlling select list (this.value)
-    var obj = Select_List_Data[ this.value ];
-    //console.log(obj)
-};
+    document.forms['demoForm'].elements['category'].onchange = function(e) {
+        // name of associated select list
+        var relName = 'choices[]';
 
-var Select_List_Data = {{songdict|safe}}; //dictionary of the form {"playlist"+playlist_name:[list of songs]}
-// populate associated select list when page loads
-window.onload = function() {
-    var form = document.forms['demoForm'];
-    
-    // reference to controlling select list
-    var sel = form.elements['category'];
-    //sel.selectedIndex = 0;
-    console.log("sel", sel.value)
-    // name of associated select list
-    var relName = 'choices[]';
-    // reference to associated select list
-    var rel = form.elements[ relName ];
-    
-    // get data for associated select list passing its name
-    // and value of selected in controlling select list
-    var data = Select_List_Data[ sel.value ];
-    console.log("data",data)
-    // add options to associated select list
-    appendDataToSelect(rel, data);
-};
+        // reference to associated select list 
+        var relList = this.form.elements[relName];
+
+        // get data from object literal based on selection in controlling select list (this.value)
+        var obj = Select_List_Data[this.value];
+        //console.log(obj)
+    };
+
+    var Select_List_Data = {{songdict | safe}}; //dictionary of the form {"playlist"+playlist_name:[list of songs]}
+    // populate associated select list when page loads
+    window.onload = function() {
+        var form = document.forms['demoForm'];
+
+        // reference to controlling select list
+        var sel = form.elements['category'];
+        //sel.selectedIndex = 0;
+        console.log("sel", sel.value)
+            // name of associated select list
+        var relName = 'choices[]';
+        // reference to associated select list
+        var rel = form.elements[relName];
+
+        // get data for associated select list passing its name
+        // and value of selected in controlling select list
+        var data = Select_List_Data[sel.value];
+        console.log("data", data)
+            // add options to associated select list
+        appendDataToSelect(rel, data);
+    };
 </script>
 {% endblock %}

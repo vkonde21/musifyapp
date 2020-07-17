@@ -20,7 +20,7 @@
         
         .bg {
             /* The image used */
-            background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(19).jpg");
+            background-image: url("http://appinformers.com/wp-content/uploads/2017/03/musicaa.jpg");
             /* Full height */
             height: 100%;
             /* Center and scale the image nicely */
@@ -65,7 +65,7 @@
             {% if user.is_authenticated %}
             <a class="btn btn-primary mx-2" href="{% url 'profile' %}">Profile</a>
             <a class="btn btn-primary mx-2" href="{% url 'logout' %}">Logout</a> {% else %}
-            <a class="btn btn-primary" href="{% url 'login' %}">Login</a> {% endif %}
+            <a class="btn btn-primary mx-2" href="{% url 'login' %}">Login</a> {% endif %}
 
         </div>
     </nav>
