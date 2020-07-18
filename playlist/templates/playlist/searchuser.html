@@ -3,6 +3,7 @@
 {% block body%}
 {% load auth_extras %}
 <div class="container">
+{% if follow %}
 {% for user in users%}
 <div class="jumbotron my-3 border border-success" style="width:400px;">
   <center><h1 class="display-6">{{user.username}}</h1>
@@ -22,5 +23,20 @@
   </p>
 </div>
 {% endfor %}
+{%else%}
+
+{% for f in followers%}
+  <div class="jumbotron my-3 border border-success" style="width:400px;">
+  <center><h1 class="display-6">{{f.username}}</h1>
+  <img class="rounded-circle account-img" src="{{ f.profile.image.url }}"></center>
+  <hr class="my-4">
+  <p class="lead">
+    <h3>Followers:{{f.profile.followers.all|length}}</h3>
+    <h3>Following:{{f.profile.following.all|length}}</h3>
+    <a class="btn btn-primary btn-lg" href="/rejectrequest/{{f.id}}" role="button">Reject Request</a>
+  </p>
+  </div>
+{%endfor%}
+{%endif%}
 </div>
 {% endblock %}

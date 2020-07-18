@@ -317,4 +317,18 @@ def searchuser(request):
     user = user.lower()
     qs = User.objects.filter(Q(username__icontains=user))
     following = request.user.profile.following.all()
-    return render(request, "playlist/searchuser.html", {"users":qs, "following":following})
+    print(following)
+    return render(request, "playlist/searchuser.html", {"users":qs, "following":following, "follow":1})
+
+def followers(request):
+    user = request.user
+    followers = request.user.profile.followers.all()
+    return render(request, "playlist/searchuser.html", {"followers": followers})
+
+def rejectrequest(request, userid):
+    user = request.user
+    user2 = User.objects.get(id = userid)
+    user.profile.followers.remove(user2)
+    user2.profile.following.remove(user)
+    messages.success(request, f"{user2.username} is no more your follower!!")
+    return redirect("/home")

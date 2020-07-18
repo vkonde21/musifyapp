@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import updateplaylist,playsonglist, sortbydate, sortbyartist, sortbytitle, ViewPlaylist, homepage, createplaylist, Playlists, EditPlaylist, addsong, updatesong, deletesong, deleteplaylist, searchuser, followuser, unfollowuser, userdashboard, copysong, transfersong, copysongtoplay, transfersongtoplay
+from .views import rejectrequest, followers, updateplaylist,playsonglist, sortbydate, sortbyartist, sortbytitle, ViewPlaylist, homepage, createplaylist, Playlists, EditPlaylist, addsong, updatesong, deletesong, deleteplaylist, searchuser, followuser, unfollowuser, userdashboard, copysong, transfersong, copysongtoplay, transfersongtoplay
 app_name = "playlist"
 urlpatterns = [
     path('home/', Playlists.as_view(), name="home" ),
@@ -23,6 +23,8 @@ urlpatterns = [
     path("sortbyartist/<int:pid>", sortbyartist, name="sortbyartist"),
     path("sortbytitle/<int:pid>", sortbytitle, name="sortbytitles"),
     path("detailview/<int:userid>/<int:pk>",ViewPlaylist.as_view(), name="viewdetails"),
-    path("playlists/", playsonglist.as_view(), name="playlists")
+    path("playlists/", playsonglist.as_view(), name="playlists"),
+    path("followers/", followers, name="followers"),
+    path("rejectrequest/<int:userid>",rejectrequest, name="reject" )
 
 ]
